@@ -1,0 +1,6 @@
+# Ignore .env file
+.env
+
+# Ignore node_modules folder but not package.json file
+node_modules
+!node_modules/package.json
