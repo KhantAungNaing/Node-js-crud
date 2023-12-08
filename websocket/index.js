@@ -11,7 +11,7 @@ let app = express();
 
 //server setup
 let server = app.listen(5000,()=>{
-    console.log("project is running on local host 5000. Ssave the world");
+    console.log("project is running on local host 5000.");
 });
 
 
