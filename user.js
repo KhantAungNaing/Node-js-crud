@@ -5,11 +5,14 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// .env 
+require('dotenv').config();
+
 // Connect to PostgreSQL
 //insert your db config to test
 const pool = new Pool({
     user: 'postgres',
-    password: 'admin',
+    password: process.env.DB_HOST,
     host: 'localhost',
     database: 'users',
     port: 5432,
@@ -23,14 +26,18 @@ app.use(bodyParser.json());
 app.post('/users/create', async (req, res) => {
   try {
     const { id, name, username, nrc, email, phno, user_type, dob, gender, address } = req.body;
-    const result = await pool.query('INSERT INTO users_tbl (id,name,username,nrc,email,phno,user_type,dob,gender,address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *', 
-                                            [id, name, username, nrc, email, phno, user_type, dob, gender, address]);
+    const result = await pool.query('INSERT INTO users_tbl (id, name, username, nrc, email, phno, user_type, dob, gender, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
+      [id, name, username, nrc, email, phno, user_type, dob, gender, address]);
+
+    // Returning the inserted row in the response
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(400).send(error);
   }
 });
+
+
 
 app.get('/users/getAllUsers', async (req, res) => {
   try {
